@@ -1,0 +1,26 @@
+body {
+	background-color: #2A4572;
+	color: #F4B350;
+}
+
+.welcome, .search-pet {
+	text-align: center;
+}
+
+form {
+	box-sizing: border-box;
+	text-align: center
+
+}
+
+#submit {
+	color: red;
+}
+
+a:link {
+	color: #CF1343
+}
+
+a:visited {
+	color: #DA4DD1;
+}
