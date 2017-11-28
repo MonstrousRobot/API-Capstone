@@ -24,3 +24,7 @@ a:link {
 a:visited {
 	color: #DA4DD1;
 }
+
+ul {
+	list-style: none;
+}

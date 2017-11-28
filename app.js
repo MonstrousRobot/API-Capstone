@@ -1,15 +1,15 @@
 const baseUrl = 'http://api.petfinder.com/shelter.find'
 //const endPoint2 = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&id=CA2477&output=full&callback=?`
 
+//When the user submits the location it will bring a list of available shelters in the area
 $('form').submit(function(event){
 	event.preventDefault()
+	//user input
 	const searchPet = $('#search-pet').val()
-	console.log('searchPet', searchPet)
-	console.log(baseUrl)
 	const endPoint = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&location=${searchPet}&output=full&callback=?`
-	
-
+	//combining baseurl and endpoint to not have a long string
 	$.getJSON(baseUrl + endPoint, function(data) {
+		//looping through api(baseurl)
 		const shelters = data.petfinder.shelters.shelter
 		const toAppend = shelters.map(shelter => {
 			const name = shelter.name.$t
@@ -17,11 +17,11 @@ $('form').submit(function(event){
 			const city = shelter.city.$t
 			const zip = shelter.zip.$t
 			const id = shelter.id.$t
-			//console.log(shelter)
-			return `<div>
+			//Displaying 
+			return `<ul><li>
 						<h1><a href="#" class="shelter" data-id=${id}>${name}</a></h1>
 						<h2>Located in ${city}, ${state}, ${zip}</h2>
-					</div>`
+					</li></ul>`
 		})
 		$('.results').html(toAppend)
 	});
@@ -49,7 +49,7 @@ $('.results').on('click', '.shelter', function(event){
 							<h3>${description}</h3>
 
 						</div>`
-			$('.pics').append(toAppend2)
+			
 			//console.log(pets)
 			const breeds = pet.breeds.breed
 			let finalBreed
@@ -62,21 +62,9 @@ $('.results').on('click', '.shelter', function(event){
 			const filteredImgs = pet.media.photos.photo.filter(photo => {
 				return photo['@size'] === 'x'
 			}).map(photo => photo.$t)
-			
-			
-			//use filteredImgs to display them to the user
-			//console.log(filteredImgs)
-
-			
 		}) 
-		//need for each pet: age, animal, breed, description?, name, pic, sex
-		
-
 	})
-
-	//get json to find pets within the shelter? shelter.getPets
-	//load ID's on individual shelter
-	//load another endPoint?
+	$('.pics').append(toAppend2)
 })
 
 //		RESEARCH THIS!
