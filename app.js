@@ -1,14 +1,26 @@
-const baseUrl = 'http://api.petfinder.com/shelter.find'
-//const endPoint2 = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&id=CA2477&output=full&callback=?`
+const baseUrl = 'https://api.petfinder.com/shelter.find'
+
+const spinner = '<img src="./pictures/spinner.gif" class="spinner">'
 
 //When the user submits the location it will bring a list of available shelters in the area
 $('form').submit(function(event){
 	event.preventDefault()
-	//user input
+	//fading out the landing page
+	$('.results').html(spinner)
+
+	// 
 	const searchPet = $('#search-pet').val()
 	const endPoint = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&location=${searchPet}&output=full&callback=?`
-	//combining baseurl and endpoint to not have a long string
+	// combining baseurl and endpoint to not have a long string
 	$.getJSON(baseUrl + endPoint, function(data) {
+		
+		if (!data.petfinder.shelters) {
+			const err = `<h1>Incorrect address entered</h1>
+						 <p><center>Example Los Angeles, CA</center></p>`
+			$('.results').html(err)
+			return
+		}
+
 		//looping through api(baseurl)
 		const shelters = data.petfinder.shelters.shelter
 		const toAppend = shelters.map(shelter => {
@@ -27,45 +39,70 @@ $('form').submit(function(event){
 	});
 });
 
-$('.results').on('click', '.shelter', function(event){
+$('.results').on('click', '.shelter', event => {
 	event.preventDefault()
 	// console.log('event.currentTarget', event.currentTarget)
+	$('.results').html(spinner)
 	
+	const id = $(event.currentTarget).data('id')
 	
-	const id = $(this).data('id')
-	const baseUrl2 = 'http://api.petfinder.com/shelter.getPets'
+	const baseUrl2 = 'https://api.petfinder.com/shelter.getPets'
 	const endPoint2 = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&id=${id}&output=full&callback=?`
 
-	$.getJSON(baseUrl2 + endPoint2, function(data) {
-		const pets = data.petfinder.pets.pet
+	$.getJSON(baseUrl2 + endPoint2, data => {
+
+		if (!data.petfinder.pets) {
+			$('.results').html(`<h1>No pets found at this shelter</h1>`)
+			return
+		}
+
+		let pets = data.petfinder.pets.pet
+		pets = Array.isArray(pets) ? pets : [pets]
+
 		const toAppend2 = pets.map(pet => {
 			const age = pet.age.$t
 			const animal = pet.animal.$t
-			const description = pet.description.$t
-			const name = pet.name.$t
-			const sex = pet.sex.$t
-			return `<div>
-							<h1>${name} is a ${animal} who is ${age}</h1>
-							<h3>${description}</h3>
 
-						</div>`
+			const desc = pet.description.$t
+			const description = desc ? desc : 'No description available'
+
+			const name = pet.name.$t
+
+			//Changes 'M' to Male and 'F' to Female
+			const sex = pet.sex.$t === "M" ? "Male" : "Female"
 			
-			//console.log(pets)
 			const breeds = pet.breeds.breed
-			let finalBreed
-			if (Array.isArray(breeds)) {
-				finalBreed = breeds.map(breed => breed.$t).join(' / ')
-			} else {
-				finalBreed = breeds.$t
-			}
 			
-			const filteredImgs = pet.media.photos.photo.filter(photo => {
-				return photo['@size'] === 'x'
-			}).map(photo => photo.$t)
+			const finalBreed = Array.isArray(breeds) 
+							   	? breeds.map(breed => breed.$t).join(' / ') 
+								: breeds.$t
+			
+			let filteredImgs
+
+			if (pet.media.photos) {
+				filteredImgs = pet.media.photos.photo.filter(photo => {
+					return photo['@size'] === 'x'
+				}).map(photo => {
+					return `<img src=${photo.$t} />`
+				})
+
+			} else {
+				filteredImgs = "<img src='./pictures/pets.jpg' />"
+			}
+
+			
+			return 		`<div class="inner">
+							<h1>${name} is a ${animal} who is a ${age} ${sex}</h1>
+							<p>${description}</p>
+							<div class="polaroid">${filteredImgs}</div>
+						</div>`
 		}) 
+
+		$('.results').html(toAppend2);
+
 	})
-	$('.pics').append(toAppend2)
 })
+
 
 //		RESEARCH THIS!
 // click hanlder on links
