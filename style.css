@@ -20,11 +20,12 @@ form {
 }
 
 a:link {
-	color: #CF1343
+	color: #DA4DD1;
 }
 
 a:visited {
-	color: #DA4DD1;
+	color: #CF1343;
+	
 }
 
 ul {
