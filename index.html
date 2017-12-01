@@ -3,21 +3,28 @@
 <head>
 	<meta charset="UTF-8">
 	<title>API Capstone</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<h1 class= "welcome">Welcome</h1>
+	<!-- <div class="landing-page"> -->
+		
+	</div>
+	<p class= "welcome">Type in your city and state or zip code</p>
 	
-	<div>
+	<div class="label">
 		<form>
 			<label for="search-pet"></label>
-			<input type="text" id="search-pet" class="search-pet" value="los angeles, california">
+			<input type="text" id="search-pet" class="search-pet" value ="Los Angeles, California" placeholder="Ex: Los Angeles, California">
 			<input id="submit" type="submit">
 		</form>
 	</div>
-
-	<div class='results'></div>
-	<div class="pics"></div>
+	
+	<div class='results'>
+		<h1>Find your next best friend</h1>
+		<img src="./pictures/cool-dog.jpg" alt="cute-pets" class="pet-pic">
+	</div>
+	<!-- <button onclick="goBack()">Go Back</button> -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="app.js"></script>
