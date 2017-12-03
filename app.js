@@ -12,7 +12,7 @@ $('form').submit(function(event){
 	const searchPet = $('#search-pet').val()
 	const endPoint = `?format=json&key=5ccf65ce5510a22f460edeec72b873d2&location=${searchPet}&output=full&callback=?`
 	// combining baseurl and endpoint to not have a long string
-	$.getJSON(baseUrl + endPoint, function(data) {
+	$.getJSON(baseUrl + endPoint, data => {
 		
 		if (!data.petfinder.shelters) {
 			const err = `<h1>Incorrect address entered</h1>
