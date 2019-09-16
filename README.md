@@ -1,4 +1,4 @@
-# API-Capstone
+# API
 Pet Adoption API
 Using an API from https://www.petfinder.com/
 ```
